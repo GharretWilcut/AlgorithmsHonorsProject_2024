@@ -44,3 +44,32 @@ def dijkstra_algorithm(graph, initial,end):
                     return path , visited
 
     return path, visited
+
+def dijkstra_algorithm_driver(graph, initial,end_set):
+    visited = {initial: 0}
+    h = [(0, initial)]
+    path = {}
+
+    nodes = list(graph.nodes)[None:None:None]
+
+    while nodes and h and end_set:
+        current_weight, min_node = heapq.heappop(h)
+        try:
+            while min_node not in nodes:
+                current_weight, min_node = heapq.heappop(h)
+        except IndexError:
+            break
+
+        nodes.remove(min_node)
+
+        for v in graph.edges(min_node):
+            i = v[1]
+            weight = current_weight + graph.get_edge_data(min_node, i)[0]['travel_time']
+            if i not in visited or weight < visited[i]:
+                visited[i] = weight
+                heapq.heappush(h, (weight, i))
+                path[i] = min_node
+                if (min_node in end_set):
+                    end_set.discard(min_node)
+                
+    return path, visited
