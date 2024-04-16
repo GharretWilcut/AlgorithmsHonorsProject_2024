@@ -69,7 +69,5 @@ def dijkstra_algorithm_driver(graph, initial,end_set):
                 visited[i] = weight
                 heapq.heappush(h, (weight, i))
                 path[i] = min_node
-                if (min_node in end_set):
-                    end_set.discard(min_node)
                 
     return path, visited
