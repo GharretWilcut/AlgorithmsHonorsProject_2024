@@ -2,9 +2,9 @@ import sys
  
 class MaxHeap:
  
-    def __init__(self, maxsize):
+    def __init__(self):
          
-        self.maxsize = maxsize
+        self.maxsize = 2
         self.size = 0
         self.Heap = [0] * (self.maxsize + 1)
         self.Heap[0] = sys.maxsize
@@ -73,7 +73,7 @@ class MaxHeap:
         if self.size >= self.maxsize:
             return
         self.size += 1
-        self.Heap[self.size] = element
+        self.Heap[self.size] = element.age
  
         current = self.size
  

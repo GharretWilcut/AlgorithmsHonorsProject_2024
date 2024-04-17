@@ -58,6 +58,7 @@ def find_shortest_driver_dikstra(G,list_of_deliveries,drivers,delivery_set):
             route.reverse()
             j.get_routes(route, i.restaurant_loc)
             j.get_times(route_times,i.restaurant_loc)
+            j.get_ratio(i)
 
 
     
