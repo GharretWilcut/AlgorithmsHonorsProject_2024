@@ -7,6 +7,8 @@ class delivery:
         self.restaurant_loc = restaurant_loc
         self.wait = random.randint(0,15)
         self.reward = 0
+        self.reward_ratio = {}
+        self.route_to_restaurant_loc = 0
         self.dropoff(N_L)    
         #gets reward using the drop off time and then adds a random tip between 0 - 15
     def get_reward(self):
@@ -38,3 +40,6 @@ class delivery:
         
     def total_time(self):
         return self.wait + self.dropoff_time + self.time_to_restaurant
+    
+    def get_ratio(self,driver):
+        self.reward_ratio[driver.init_location] = (self.reward / (driver.times[self.restaurant_loc] + self.dropoff_time))

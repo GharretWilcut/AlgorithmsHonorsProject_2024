@@ -11,11 +11,11 @@ class driver:
         g = random.randint(0,len(N_L))
         self.init_location = N_L[g]
     
-    def get_routes(self,route,delivery_set):
-        self.routes[delivery_set] = route
+    def get_routes(self,route,restaurant_loc):
+        self.routes[restaurant_loc] = route
     
-    def get_times(self,times,delivery_set):
-        self.times[delivery_set] = int(times[delivery_set])
+    def get_times(self,times,restaurant_loc):
+        self.times[restaurant_loc] = int(times[restaurant_loc])
     
     def get_ratio(self,deliveries):
         self.reward_ratios[deliveries.restaurant_loc] = (deliveries.reward / (self.times[deliveries.restaurant_loc] + deliveries.dropoff_time))
