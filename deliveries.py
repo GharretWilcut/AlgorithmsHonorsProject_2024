@@ -12,7 +12,7 @@ class delivery:
         self.dropoff(N_L)    
         #gets reward using the drop off time and then adds a random tip between 0 - 15
     def get_reward(self):
-        self.reward = (math.log(1 + self.dropoff_time) + random.randint(0,15))
+        self.reward = (math.log(1 + (self.dropoff_time)) + random.randint(0,15))
     def driver_location(self, loc):
         self.driver_loc = loc
             

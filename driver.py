@@ -7,6 +7,7 @@ class driver:
         self.routes ={}
         self.times = {}
         self.reward_ratios = {}
+        self.restaurants = []
     def get_location(self,N_L):
         g = random.randint(0,len(N_L))
         self.init_location = N_L[g]
@@ -15,7 +16,9 @@ class driver:
         self.routes[restaurant_loc] = route
     
     def get_times(self,times,restaurant_loc):
-        self.times[restaurant_loc] = int(times[restaurant_loc])
+        self.times[restaurant_loc] = int(times[restaurant_loc] * 3600)
     
     def get_ratio(self,deliveries):
         self.reward_ratios[deliveries.restaurant_loc] = (deliveries.reward / (self.times[deliveries.restaurant_loc] + deliveries.dropoff_time))
+    def restaurant_heap(self,heap):
+        self.restaurants = heap
