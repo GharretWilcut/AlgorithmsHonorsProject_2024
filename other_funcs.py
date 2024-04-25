@@ -104,12 +104,11 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
     copy_deliveries.extend(list_of_deliveries)
     heap_driver = []
     heap_deliveries = []
-    already_picked = {}
-    picked_more_than_once = ()
-    listy = ()
-    conflict = ()
-    unique = ()
+    listy = []
+    conflict = []
+    unique = []
     b = True
+    rounds = 0
     # gets highest aged driver 
     for i in drivers:
         heapq.heappush(heap_driver,(-(i.age), i))
@@ -125,37 +124,37 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
         heapq.heappush(heap_driver,(-(i.age), i))
     for i in drivers:
         oldest_driver = heapq.heappop(heap_driver)
-        first = heapq.heappop(oldest_driver[1].restaurants)
+        first = (oldest_driver[1].restaurants[0])
         p = poss_order(first[1],oldest_driver[1])
         #just make a list of poss_order objects and iterate through that for unique restaurants 
         listy.append(p)
     for i in listy:
+        b = True
         for j in listy:
-            if i.delivery.restaurant_loc == j.delivery.restaurant_loc:
+            if i.delivery.restaurant_loc == j.delivery.restaurant_loc and i.driver.init_location != j.driver.init_location:
                 conflict.append(i)
                 b = False
         if b == True:
             unique.append(i)
     taken = []
-    for i in already_picked:
-        already_picked[i].route_to_restaurant_from_driver(i[0].routes[i.restaurant_loc])
-        already_picked[i].time_to_restaurant_from_driver(i[0].times[i.restaurant_loc])
-        taken.append(already_picked[i])
-        already_picked.remove(already_picked[i])
+    for i in unique:
+        i.delivery.route_to_restaurant_from_driver(i.driver.routes[i.delivery.restaurant_loc])
+        i.delivery.time_to_restaurant_from_driver(i.driver.times[i.delivery.restaurant_loc])
+        taken.append(i.delivery.restaurant_loc)
         
-
-        if i[1][1] not in taken:
-            i[1][1].route_to_restaurant_from_driver(i[0].routes[i[1][1].restaurant_loc])
-            i[1][1].time_to_restaurant_from_driver(i[0].times[i[1][1].restaurant_loc])
-            picked_more_than_once.remove(i[1][1])
-            taken.append(i[1][1])
-        if i[1][1] in taken:
+    for i in conflict:
+        if i.delivery.restaurant_loc not in taken:
+            i.delivery.route_to_restaurant_from_driver(i.driver.routes[i.delivery.restaurant_loc])
+            i.delivery.time_to_restaurant_from_driver(i.driver.times[i.delivery.restaurant_loc])
+            taken.append(i.delivery.restaurant_loc)
+        if i.delivery.restaurant_loc in taken:
             b = True
-            while b:
-                next = heapq.heappop(i[0].restaurants)
-                if next not in taken:
-                    i[1][1].route_to_restaurant_from_driver(i[0].routes[i[1][1].restaurant_loc])
-                    i[1][1].time_to_restaurant_from_driver(i[0].times[i[1][1].restaurant_loc])
-                    picked_more_than_once.remove(i[1][1])
-                    taken.append(i[1][1])
+            rounds = 0
+            while b and rounds <= len(list_of_deliveries) - 1:
+                next = (i.driver.restaurants[rounds])
+                if next[1].restaurant_loc not in taken:
+                    next[1].route_to_restaurant_from_driver(i.driver.routes[next[1].restaurant_loc])
+                    next[1].time_to_restaurant_from_driver(i.driver.times[next[1].restaurant_loc])
+                    taken.append(next[1].restaurant_loc)
                     b = False
+                rounds += 1
