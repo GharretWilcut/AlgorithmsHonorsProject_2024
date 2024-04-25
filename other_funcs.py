@@ -106,7 +106,10 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
     heap_deliveries = []
     already_picked = {}
     picked_more_than_once = ()
-
+    listy = ()
+    conflict = ()
+    unique = ()
+    b = True
     # gets highest aged driver 
     for i in drivers:
         heapq.heappush(heap_driver,(-(i.age), i))
@@ -125,14 +128,14 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
         first = heapq.heappop(oldest_driver[1].restaurants)
         p = poss_order(first[1],oldest_driver[1])
         #just make a list of poss_order objects and iterate through that for unique restaurants 
-        if first[1].restaurant_loc not in already_picked and first[1] not in picked_more_than_once:
-            already_picked[first[1].restaurant_loc] = (first[1],oldest_driver[1])
-        elif first[1].restaurant_loc in already_picked:
-            del already_picked[first[1].restaurant_loc]
-            picked_more_than_once.append(first[1], oldest_driver[1])
-        else:
-            picked_more_than_once.append(first[1], oldest_driver[1])
-
+        listy.append(p)
+    for i in listy:
+        for j in listy:
+            if i.delivery.restaurant_loc == j.delivery.restaurant_loc:
+                conflict.append(i)
+                b = False
+        if b == True:
+            unique.append(i)
     taken = []
     for i in already_picked:
         already_picked[i].route_to_restaurant_from_driver(i[0].routes[i.restaurant_loc])
