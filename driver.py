@@ -16,7 +16,7 @@ class driver:
         self.routes[restaurant_loc] = route
     
     def get_times(self,times,restaurant_loc):
-        self.times[restaurant_loc] = int(times[restaurant_loc] * 3600)
+        self.times[restaurant_loc] = int(times[restaurant_loc])
     
     def get_ratio(self,deliveries):
         self.reward_ratios[deliveries.restaurant_loc] = (deliveries.reward / (self.times[deliveries.restaurant_loc] + deliveries.dropoff_time))

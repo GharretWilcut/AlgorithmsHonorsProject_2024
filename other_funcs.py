@@ -77,6 +77,7 @@ def find_shortest_driver_dikstra(G,list_of_deliveries,drivers,delivery_set):
             if max == i.reward_ratio[oldest_driver[1].init_location] / oldest_driver[1].times[i.restaurant_loc]:
                 i.route_to_restaurant_from_driver(oldest_driver[1].routes[i.restaurant_loc])
                 i.time_to_restaurant_from_driver(oldest_driver[1].times[i.restaurant_loc])
+                i.driver_location(oldest_driver[1].init_location)
                 copy_deliveries.remove(i)
                 break
 
@@ -100,8 +101,6 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
             j.get_ratio(i)
             i.get_ratio(j)
     #sorts them by age largest to smallest thats why there is a negative
-    copy_deliveries = []
-    copy_deliveries.extend(list_of_deliveries)
     heap_driver = []
     heap_deliveries = []
     listy = []
@@ -113,16 +112,9 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
     for i in drivers:
         heapq.heappush(heap_driver,(-(i.age), i))
     for i in drivers:
-        oldest_driver = heapq.heappop(heap_driver)
         #gets the highest reward ratio for said driver clears the heap for the next run
-        heap_deliveries = []
-        for j in copy_deliveries:
-            heapq.heappush(heap_deliveries,(- j.reward_ratio[oldest_driver[1].init_location], j))
-        oldest_driver[1].restaurant_heap(heap_deliveries)
-    #filling the heap back up
-    for i in drivers:
-        heapq.heappush(heap_driver,(-(i.age), i))
-    for i in drivers:
+        for j in list_of_deliveries:
+            heapq.heappush(i.restaurants,(- j.reward_ratio[i.init_location], j))
         oldest_driver = heapq.heappop(heap_driver)
         first = (oldest_driver[1].restaurants[0])
         p = poss_order(first[1],oldest_driver[1])
@@ -140,21 +132,26 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
     for i in unique:
         i.delivery.route_to_restaurant_from_driver(i.driver.routes[i.delivery.restaurant_loc])
         i.delivery.time_to_restaurant_from_driver(i.driver.times[i.delivery.restaurant_loc])
+        i.delivery.driver_location(i.driver.init_location)
         taken.append(i.delivery.restaurant_loc)
         
     for i in conflict:
         if i.delivery.restaurant_loc not in taken:
             i.delivery.route_to_restaurant_from_driver(i.driver.routes[i.delivery.restaurant_loc])
             i.delivery.time_to_restaurant_from_driver(i.driver.times[i.delivery.restaurant_loc])
+            i.delivery.driver_location(i.driver.init_location)
             taken.append(i.delivery.restaurant_loc)
         if i.delivery.restaurant_loc in taken:
             b = True
             rounds = 0
-            while b and rounds <= len(list_of_deliveries) - 1:
-                next = (i.driver.restaurants[rounds])
+            while b and rounds <= len(list_of_deliveries) - 1 :
+                next = heapq.heappop(i.driver.restaurants)
                 if next[1].restaurant_loc not in taken:
                     next[1].route_to_restaurant_from_driver(i.driver.routes[next[1].restaurant_loc])
                     next[1].time_to_restaurant_from_driver(i.driver.times[next[1].restaurant_loc])
+                    i.delivery.driver_location(i.driver.init_location)
                     taken.append(next[1].restaurant_loc)
                     b = False
-                rounds += 1
+                rounds = rounds + 1
+
+
