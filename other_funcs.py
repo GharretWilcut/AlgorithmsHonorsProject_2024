@@ -66,7 +66,7 @@ def find_shortest_driver_dikstra(G,list_of_deliveries,drivers,delivery_set):
     copy_deliveries = []
     copy_deliveries.extend(list_of_deliveries)
     for i in drivers:
-        heapq.heappush(heap_driver,(-(i.age), i))
+        heapq.heappush(heap_driver,(-id(i), i))
     for i in drivers:    
         oldest_driver = heapq.heappop(heap_driver)
         max = 0
