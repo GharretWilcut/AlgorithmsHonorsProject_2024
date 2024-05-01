@@ -1,9 +1,9 @@
-Gharret Wilcut
-4/29/2024
-CS 2500 
-Honors Project Report
-Delivery Suggestion System Honors Project
-	In the past several years there have been several companies offering services when it comes to food based delivery services. Companies like Doordash, UberEats, and Grubhub have all provided a similar service to what I have prototyped in my project. 
+Gharret Wilcut <br>
+4/29/2024<br>
+CS 2500 <br>
+Honors Project Report<br>
+<h1>Delivery Suggestion System Honors Project</h1>
+In the past several years there have been several companies offering services when it comes to food based delivery services. Companies like Doordash, UberEats, and Grubhub have all provided a similar service to what I have prototyped in my project. 
 	
 My simulation uses OSMNX to get an accurate graph of the city Chicago to be used for these tests. I also acquired the locations of restaurants in Chicago by using their food inspection data. I combined these to match a node on the graph to the approximate location of a restaurant using its latitude and longitude.
   
