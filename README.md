@@ -7,7 +7,7 @@ Delivery Suggestion System Honors Project
 	
 My simulation uses OSMNX to get an accurate graph of the city Chicago to be used for these tests. I also acquired the locations of restaurants in Chicago by using their food inspection data. I combined these to match a node on the graph to the approximate location of a restaurant using its latitude and longitude.
   
-![dijkstra_algorithm](dijkstra.JPG)
+![dijkstra_algorithm](pictures\dijkstra.JPG)
 
 The main algorithm holding this whole project together is Dijkstra’s, I have been using it in conjunction with the heap data structure. The addition of heaps being used decreased the total time to process the algorithm by roughly 90% going from taking it around 70 seconds down to 7 seconds this was a major help seeing that otherwise this program would have taken days to run. Originally the Dijkstra's algorithm did have a target built in, making the algorithm stop when it found the target node. This allowed for a roughly 10% reduction even further but I stopped using it because I had concerns for whether or not it was interfering with the program causing key errors. It can easily be reinstated and allow for a reduction in overall time but due to how long the program takes to finish I worried it would be a fruitless endeavor.
  
