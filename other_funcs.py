@@ -2,11 +2,14 @@ import osmnx as ox
 import random
 import networkx as nx
 import heapq
+import matplotlib.pyplot as plt
 from dijkstra_algorithm import dijkstra_algorithm
+from deliveries import delivery
 from dijkstra_algorithm import make_route
 from dijkstra_algorithm import dijkstra_algorithm_driver
 from driver import driver
 from test_object import poss_order
+
 
 def find_node(restaurants, G):
         restaurant_nodes = []
@@ -155,3 +158,58 @@ def find_shortest_driver_dikstra_rest_heap(G,list_of_deliveries,drivers,delivery
                 rounds = rounds + 1
 
 
+
+def makeExamples(Gc,rows,N_L, num):
+    preview_items = random_restaurant_locations(rows, num)
+    preview_nodes = find_node(preview_items, Gc)
+    preview_deliveries = []
+    for i in preview_nodes:
+        d = delivery(i, N_L)
+        preview_deliveries.append(d)
+
+    preview_drivers = []
+    for i in range(num):
+        single = driver(N_L, preview_deliveries)
+        preview_drivers.append(single)
+
+    find_routes_for_res_to_dropoff(Gc, preview_deliveries)
+    restaurant_set = set()
+    for i in preview_deliveries:
+        restaurant_set.add(i.restaurant_loc)
+    find_shortest_driver_dikstra(Gc, preview_deliveries, preview_drivers, restaurant_set)
+
+    final_routes = graph_full_routes(preview_deliveries)
+
+    driver_colors = ['red', 'cyan', 'lime', 'orange']
+
+    fig, ax = ox.plot_graph(Gc, show=False, close=False,
+                            node_size=0, edge_linewidth=0.3,
+                            edge_color='#333333', bgcolor='black')
+
+    for idx, i in enumerate(range(0, len(final_routes), 2)):
+        color = driver_colors[idx % len(driver_colors)]
+        
+        route1 = final_routes[i]
+        xs = [Gc.nodes[n]['x'] for n in route1]
+        ys = [Gc.nodes[n]['y'] for n in route1]
+        ax.plot(xs, ys, c=color, linewidth=1.5, zorder=4, alpha=0.9, label=f'Driver {idx+1}')
+
+        route2 = final_routes[i+1]
+        xs = [Gc.nodes[n]['x'] for n in route2]
+        ys = [Gc.nodes[n]['y'] for n in route2]
+        ax.plot(xs, ys, c=color, linewidth=1.5, zorder=4, alpha=0.4, linestyle='dashed')
+
+    for idx, d in enumerate(preview_drivers):
+        if d.init_location in Gc.nodes:
+            x = Gc.nodes[d.init_location]['x']
+            y = Gc.nodes[d.init_location]['y']
+            ax.scatter(x, y, c=driver_colors[idx], s=100, zorder=6, marker='o')
+
+    for d in preview_deliveries:
+        x = Gc.nodes[d.restaurant_loc]['x']
+        y = Gc.nodes[d.restaurant_loc]['y']
+        ax.scatter(x, y, c='white', s=60, marker='*', zorder=7)
+
+    ax.legend(facecolor='#222222', labelcolor='white', loc='upper left')
+    ax.set_title("Preview: 4 Drivers, 4 Deliveries — Final Assigned Routes", color='white')
+    plt.show()
